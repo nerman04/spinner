@@ -3,17 +3,119 @@
   <head>
     <meta charset="UTF-8" />
     <title>돌림판</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      /* === 생략 없이 모든 CSS 포함 === */
+      html,
       body {
-        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        font-family: "Arial", sans-serif;
+        background: #f4f4f4;
         text-align: center;
+        overflow-x: hidden;
       }
+
+      h1 {
+        font-size: 5vw;
+        margin-top: 4vh;
+      }
+
       canvas {
-        border: 2px solid #333;
-        margin-top: 20px;
+        width: 90vw;
+        height: 90vw;
+        max-width: 400px;
+        max-height: 400px;
       }
+
+      button {
+        margin: 2vh 1vw;
+        padding: 2vh 4vw;
+        font-size: 4vw;
+        border-radius: 8px;
+        border: none;
+        background-color: #4caf50;
+        color: white;
+      }
+
       #admin {
-        margin-top: 30px;
+        display: none;
+        margin: 2vh auto;
+        width: 90vw;
+        max-width: 400px;
+        background: #fff;
+        padding: 2vh;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+      }
+
+      table {
+        width: 100%;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 60%;
+        font-size: 3vw;
+      }
+
+      td button {
+        font-size: 3vw;
+        background: #f44336;
+      }
+
+      /* 모달 */
+      #result-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 5vh 5vw;
+        border-radius: 12px;
+        text-align: center;
+        width: 80%;
+        max-width: 400px;
+        animation: scaleUp 0.3s ease-out;
+      }
+
+      .modal-content h2 {
+        font-size: 6vw;
+        color: #4caf50;
+      }
+
+      .modal-content p {
+        font-size: 5vw;
+        margin: 2vh 0;
+      }
+
+      .modal-content button {
+        padding: 1vh 3vw;
+        font-size: 4vw;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+      }
+
+      @keyframes scaleUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
     </style>
   </head>
@@ -23,13 +125,32 @@
     <button onclick="startSpin()">돌리기</button>
     <button onclick="toggleAdmin()">관리자</button>
 
-    <div id="admin" style="display: none">
+    <!-- 관리자 영역 -->
+    <div id="admin">
       <h3>항목 관리</h3>
       <table id="item-table"></table>
       <button onclick="addItem()">항목 추가</button>
       <button onclick="saveItems()">저장</button>
     </div>
 
-    <script src="wheel.js"></script>
+    <!-- 당첨 모달 -->
+    <div id="result-modal">
+      <div class="modal-content">
+        <h2>🎉 축하합니다!</h2>
+        <p id="winner-name"></p>
+        <button onclick="closeModal()">닫기</button>
+      </div>
+    </div>
+
+    <!-- 효과음 -->
+    <audio
+      id="spin-audio"
+      src="https://upload.wikimedia.org/wikipedia/commons/3/38/Roulette_wheel.ogg"
+      preload="auto"
+    ></audio>
+
+    <!-- 외부 confetti 라이브러리 -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="wheel.js?ver=2"></script>
   </body>
 </html>

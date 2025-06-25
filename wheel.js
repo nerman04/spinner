@@ -6,6 +6,7 @@ let items = JSON.parse(localStorage.getItem("wheelItems")) || [
 
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
+const audio = document.getElementById("spin-audio");
 
 let angle = 0;
 let targetAngle = 0;
@@ -82,8 +83,11 @@ function startSpin() {
   const finalDeg = 360 * 5 + (360 - baseDeg - offset);
   targetAngle = (finalDeg * Math.PI) / 180;
 
-  spinning = true;
   spinStart = null;
+  spinning = true;
+
+  audio.currentTime = 0;
+  audio.play();
   requestAnimationFrame(animate);
 }
 
@@ -100,8 +104,17 @@ function animate(timestamp) {
   } else {
     spinning = false;
     angle %= 2 * Math.PI;
+    audio.pause();
     setTimeout(() => {
-      alert(`🎉 당첨: ${selectedItem.name}`);
+      document.getElementById("winner-name").innerText = selectedItem.name;
+      document.getElementById("result-modal").style.display = "flex";
+
+      // 폭죽 효과 🎆
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
     }, 300);
   }
 }
@@ -115,6 +128,11 @@ function randomColor(str) {
   for (let i = 0; i < str.length; i++)
     hash = str.charCodeAt(i) + ((hash << 5) - hash);
   return `hsl(${hash % 360}, 70%, 60%)`;
+}
+
+// 모달 닫기
+function closeModal() {
+  document.getElementById("result-modal").style.display = "none";
 }
 
 // 관리자 모드
@@ -168,5 +186,5 @@ function saveItems() {
   drawWheel();
 }
 
-// 초기 화면 그리기
+// 초기
 drawWheel();
