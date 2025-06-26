@@ -1,6 +1,9 @@
+// 버전이 바뀌면 install 이벤트가 재실행됨
+const CACHE_NAME = "wheel-app-v2";
+
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open("wheel-app").then((cache) => {
+    caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll([
         "./",
         "./index.html",
