@@ -117,6 +117,25 @@
           opacity: 1;
         }
       }
+
+      #app-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        padding: 8px 0;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #888;
+        background-color: #f9f9f9;
+        z-index: 999; /* 모달 아래로 유지 */
+      }
+
+      @media (prefers-color-scheme: dark) {
+        #app-footer {
+          background-color: #222;
+          color: #aaa;
+        }
+      }
     </style>
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#4CAF50" />
@@ -162,7 +181,7 @@
     <script src="./confetti.browser.min.js?ver=6" defer></script>
     <script src="wheel.js?ver=6"></script>
   </body>
-  <div class="copyright">© 2025 sks</div>
+  <footer id="app-footer">© 2025 SKS. All rights reserved.</footer>
 </html>
 <!--
   이 HTML 파일은 돌림판 게임을 구현합니다.
