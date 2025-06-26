@@ -61,36 +61,40 @@ function drawWheel() {
 function startSpin() {
   if (spinning) return;
 
+  // ── ① 가중치 기반으로 당첨 인덱스 선택 ─────────────────────────────
   const total = items.reduce((sum, i) => sum + i.weight, 0);
-  const rand = Math.random() * total;
-  let accum = 0;
-  let selectedIndex = 0;
-
+  const r = Math.random() * total;
+  let acc = 0,
+    idx = 0;
   for (let i = 0; i < items.length; i++) {
-    accum += items[i].weight;
-    if (rand < accum) {
-      selectedIndex = i;
+    acc += items[i].weight;
+    if (r < acc) {
+      idx = i;
       break;
     }
   }
+  selectedItem = items[idx];
 
-  selectedItem = items[selectedIndex];
-
-  const sliceDeg = (items[selectedIndex].weight / total) * 360;
+  // ── ② 선택된 섹터가 포인터(12시)에 오도록 최종 각도 계산 ─────────
+  const sliceDeg = (items[idx].weight / total) * 360; // 섹터 크기
   const baseDeg = items
-    .slice(0, selectedIndex)
-    .reduce((sum, i) => sum + (i.weight / total) * 360, 0);
-  const offset = Math.random() * sliceDeg;
-  const finalDeg = 360 * 5 + (360 - baseDeg - offset);
-  targetAngle = (finalDeg * Math.PI) / 180;
+    .slice(0, idx) // 시작 각
+    .reduce((s, it) => s + (it.weight / total) * 360, 0);
+  const offsetDeg = Math.random() * sliceDeg; // 섹터 안 임의 오프셋
+  const pointerFix = 270; // 0°→3시 를 12시로 맞추기 위한 보정(+270°)
 
+  // (5바퀴) + (pointerFix  -  baseDeg  - offsetDeg)
+  let spinDeg = 360 * 5 + (pointerFix - baseDeg - offsetDeg);
+  // 음수가 될 가능성 제거
+  spinDeg = (((spinDeg % 360) + 360) % 360) + 360 * 5;
+
+  targetAngle = (spinDeg * Math.PI) / 180;
+
+  // ── ③ 애니메이션 시작 ───────────────────────────────────────────────
   spinStart = null;
   spinning = true;
-
   audio.currentTime = 0;
-  audio.play().catch((err) => {
-    console.warn("소리 재생 실패: 사용자 상호작용 필요", err);
-  });
+  audio.play().catch(() => {});
   requestAnimationFrame(animate);
 }
 
