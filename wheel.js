@@ -15,6 +15,7 @@ let spinStart = 0;
 let spinDuration = 3000;
 let selectedItem = null;
 
+// 돌림판 그리기
 function drawWheel() {
   const total = items.reduce((sum, i) => sum + i.weight, 0);
   let startAngle = 0;
@@ -176,28 +177,29 @@ function deleteItem(idx) {
 
 function saveItems() {
   localStorage.setItem("wheelItems", JSON.stringify(items));
+  // 설정 저장 완료 후 관리자 창 닫기
+  closeAdminPanel();
   alert("저장 완료");
   drawWheel();
 }
 
+// 모바일 최적화로 PC에서는 가운데 안나올 수 있음
 function showResultModal(name) {
-  // 1. 모달 내용 업데이트
   document.getElementById("winner-name").innerText = name;
   const modal = document.getElementById("result-modal");
   modal.style.display = "flex";
 
-  // 2. 모달 중심 좌표 계산
-  const rect = modal.querySelector(".modal-content").getBoundingClientRect();
+  // 모달 내부 컨텐츠 기준으로 중심 좌표 계산
+  const content = modal.querySelector(".modal-content");
+  const rect = content.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
 
-  const screenWidth = window.innerWidth;
-  const screenHeight = window.innerHeight;
+  // 화면 기준 0~1 비율로 환산
+  const originX = centerX / window.innerWidth;
+  const originY = centerY / window.innerHeight;
 
-  const originX = centerX / screenWidth;
-  const originY = centerY / screenHeight;
-
-  // 3. 모달 위에 canvas 추가
+  // confetti canvas 추가
   const myCanvas = document.createElement("canvas");
   myCanvas.id = "confetti-canvas";
   myCanvas.style.position = "fixed";
@@ -209,24 +211,28 @@ function showResultModal(name) {
   myCanvas.style.zIndex = 10000;
   document.body.appendChild(myCanvas);
 
-  // 4. confetti 실행
   const myConfetti = confetti.create(myCanvas, {
     resize: true,
     useWorker: true,
   });
 
-  // 🎉 모달 중앙에서 터지도록
+  // 정확한 위치에서 폭죽 발사 🎆
   myConfetti({
     particleCount: 200,
     spread: 100,
-    startVelocity: 30,
+    startVelocity: 35,
     origin: { x: originX, y: originY },
   });
 
-  // 5. 일정 시간 후 canvas 제거
+  // 캔버스 제거
   setTimeout(() => {
     myCanvas.remove();
   }, 3000);
+}
+
+function closeAdminPanel() {
+  const panel = document.getElementById("admin");
+  if (panel) panel.style.display = "none";
 }
 
 // 초기
