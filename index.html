@@ -118,6 +118,17 @@
         }
       }
     </style>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#4CAF50" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon-192.png" />
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("service-worker.js").then(() => {
+          console.log("서비스 워커 등록됨 ✅");
+        });
+      }
+    </script>
   </head>
   <body>
     <h1>🎯 돌림판</h1>
@@ -143,14 +154,21 @@
     </div>
 
     <!-- 효과음 -->
-    <audio
-      id="spin-audio"
-      src="https://upload.wikimedia.org/wikipedia/commons/3/38/Roulette_wheel.ogg"
-      preload="auto"
-    ></audio>
+    <audio id="spin-audio" preload="auto">
+      <source src="./Roulette_wheel.mp3" type="audio/mpeg" />
+    </audio>
 
     <!-- 외부 confetti 라이브러리 -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="wheel.js?ver=2"></script>
+    <script src="./confetti.browser.min.js?ver=5" defer></script>
+    <script src="wheel.js?ver=5"></script>
   </body>
 </html>
+<!--
+  이 HTML 파일은 돌림판 게임을 구현합니다.
+  - 돌림판을 돌리고 당첨자를 표시합니다.
+  - 관리자 모드에서 항목을 추가/삭제할 수 있습니다.
+  - confetti 효과를 사용하여 당첨 시 축하합니다.
+  - 효과음이 재생됩니다.
+  - 반응형 디자인을 적용하여 모바일에서도 잘 보입니다.
+  - 모달 창을 사용하여 당첨 결과를 표시합니다.
+-->

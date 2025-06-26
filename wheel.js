@@ -87,7 +87,9 @@ function startSpin() {
   spinning = true;
 
   audio.currentTime = 0;
-  audio.play();
+  audio.play().catch((err) => {
+    console.warn("소리 재생 실패: 사용자 상호작용 필요", err);
+  });
   requestAnimationFrame(animate);
 }
 
@@ -106,15 +108,7 @@ function animate(timestamp) {
     angle %= 2 * Math.PI;
     audio.pause();
     setTimeout(() => {
-      document.getElementById("winner-name").innerText = selectedItem.name;
-      document.getElementById("result-modal").style.display = "flex";
-
-      // 폭죽 효과 🎆
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
+      showResultModal(selectedItem.name);
     }, 300);
   }
 }
@@ -184,6 +178,55 @@ function saveItems() {
   localStorage.setItem("wheelItems", JSON.stringify(items));
   alert("저장 완료");
   drawWheel();
+}
+
+function showResultModal(name) {
+  // 1. 모달 내용 업데이트
+  document.getElementById("winner-name").innerText = name;
+  const modal = document.getElementById("result-modal");
+  modal.style.display = "flex";
+
+  // 2. 모달 중심 좌표 계산
+  const rect = modal.querySelector(".modal-content").getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+
+  const originX = centerX / screenWidth;
+  const originY = centerY / screenHeight;
+
+  // 3. 모달 위에 canvas 추가
+  const myCanvas = document.createElement("canvas");
+  myCanvas.id = "confetti-canvas";
+  myCanvas.style.position = "fixed";
+  myCanvas.style.top = 0;
+  myCanvas.style.left = 0;
+  myCanvas.style.width = "100%";
+  myCanvas.style.height = "100%";
+  myCanvas.style.pointerEvents = "none";
+  myCanvas.style.zIndex = 10000;
+  document.body.appendChild(myCanvas);
+
+  // 4. confetti 실행
+  const myConfetti = confetti.create(myCanvas, {
+    resize: true,
+    useWorker: true,
+  });
+
+  // 🎉 모달 중앙에서 터지도록
+  myConfetti({
+    particleCount: 200,
+    spread: 100,
+    startVelocity: 30,
+    origin: { x: originX, y: originY },
+  });
+
+  // 5. 일정 시간 후 canvas 제거
+  setTimeout(() => {
+    myCanvas.remove();
+  }, 3000);
 }
 
 // 초기
