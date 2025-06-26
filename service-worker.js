@@ -1,5 +1,5 @@
 // 버전이 바뀌면 install 이벤트가 재실행됨
-const CACHE_NAME = "wheel-app-v2";
+const CACHE_NAME = "wheel-app-v2.2";
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
