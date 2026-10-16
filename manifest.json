@@ -1,26 +1,16 @@
-{
-  "name": "돌림판 앱",
-  "short_name": "돌림판",
+﻿{
+  "name": "커피 원정대 · 팀 돌림판",
+  "short_name": "커피 원정대",
+  "lang": "ko",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
-  "description": "행운의 돌림판! 설치해서 빠르게 돌려보세요.",
+  "background_color": "#f5f3ec",
+  "theme_color": "#28594b",
+  "description": "팀의 커피 당번을 중복 없이 한 번에 뽑는 돌림판",
   "icons": [
-    {
-      "src": "icon.svg",
-      "type": "image/svg+xml",
-      "sizes": "any"
-    },
-    {
-      "src": "icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
+    { "src": "icon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "icon-192.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "icon-512.png", "type": "image/png", "sizes": "512x512" }
   ]
 }
